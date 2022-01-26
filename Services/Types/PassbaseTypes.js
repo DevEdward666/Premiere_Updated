@@ -1,0 +1,6 @@
+export const PASSBASE_PUBLIC_KEY =
+  'g0Zvr2EObXJ8aSxDhGGOGLWdUKUWfRHevhSjfSmmQbntXRYuPUsr1rkQplUdDb83';
+export const PASSBASE_SECRET_KEY =
+  'EzJ7wYC7D9FmRdHqZPgf4gpwGqSgfSdymxdbW3VIc1NpAxc9XurJTKYMLr7TBHTXTZAkETnb6JNWwHiYxwWc0owXwbchqzqutvMkeLFDfkhQSwQbJR1KhPEPtTteHlVj';
+export const PASSBASE_SINGLE_DATA = 'PASSBASE_SINGLE_DATA';
+export const PASSBASE_ID = 'PASSBASE_ID';

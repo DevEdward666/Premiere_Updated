@@ -1,21 +1,43 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+/**
+ * Sample React Native App
+ * https://github.com/facebook/react-native
+ *
+ * @format
+ * @flow strict-local
+ */
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+ import React, {useEffect, useState} from 'react';
+ import store from './Services/Store';
+ import Routes from './Hooks/Routes';
+ import {Provider} from 'react-redux';
+ import GlobalFont from 'react-native-global-font';
+ import {decode, encode} from 'base-64';
+ 
+ const App = () => {
+   useEffect(() => {
+     let mounted = true;
+     const globalfont = () => {
+       let fontName = 'SFUIDisplay-Medium';
+       GlobalFont.applyGlobal(fontName);
+ 
+       if (!global.btoa) {
+         global.btoa = encode;
+       }
+       if (!global.atob) {
+         global.atob = decode;
+       }
+     };
+     mounted && globalfont();
+     return () => {
+       mounted = false;
+     };
+   }, []);
+   return (
+     <Provider store={store}>
+       <Routes />
+     </Provider>
+   );
+ };
+ 
+ export default App;
+ 

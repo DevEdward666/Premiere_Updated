@@ -1,0 +1,17 @@
+export const CREATE_SOURCE = 'CREATE_SOURCE';
+
+export const RETRIEVE_SOURCE = 'RETRIEVE_SOURCE';
+export const PAID_SOURCE = 'PAID_SOURCE';
+
+export const PAYMENT_DONE = 'PAYMENT_DONE';
+
+export const PAYMENT_METHOD_CALLBACK = 'PAYMENT_METHOD_CALLBACK';
+export const PAYMENT_INTENT_CALLBACK = 'PAYMENT_INTENT_CALLBACK';
+export const ATTACH_INTENT_CALLBACK = 'ATTACH_INTENT_CALLBACK';
+
+
+export const CARD_BODY = 'CARD_BODY';
+export const CARD_HEADER = 'CARD_HEADER';
+
+export const PUBLIC_KEY_URL = 'pk_test_ZzzXKyu4NBMmaxHTUBSRix2k';
+export const SECRET_KEY_URL = 'sk_test_e3yQq9VR4V9U84irMpZT1h7X';
