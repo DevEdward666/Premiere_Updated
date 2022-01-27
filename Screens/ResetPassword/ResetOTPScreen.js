@@ -1,6 +1,12 @@
 import OTPInputView from "@twotalltotems/react-native-otp-input";
 import React, { useState, useEffect, useCallback } from "react";
-import { StyleSheet, SafeAreaView, View, Button } from "react-native";
+import {
+  StyleSheet,
+  SafeAreaView,
+  View,
+  Button,
+  TouchableHighlight,
+} from "react-native";
 import { Text } from "react-native-elements";
 import { action_update_user } from "../../Services/Actions/SignUp_Actions";
 import {
@@ -91,22 +97,22 @@ const ResetOTPScreen = () => {
           Authentication Code until {timer} seconds
         </Text>
         <View style={{ padding: 60, borderRadius: 20 }}>
-          <Button
-            style={{ color: "#0148a4" }}
-            onPress={handleSubmit}
-            title="Submit"
-            color="#0148a4"
-            accessibilityLabel="Submit"
-          />
+          <TouchableHighlight
+            style={styles.btn}
+            underlayColor="rgba(62, 178, 250, 0.5)"
+            onPress={() => handleSubmit()}
+          >
+            <Text style={styles.submitText}>Submit OTP</Text>
+          </TouchableHighlight>
         </View>
         <View style={{ padding: 60, borderRadius: 20, marginTop: -90 }}>
-          <Button
-            style={{ color: "#0148a4" }}
-            onPress={handleResend}
-            title="Resend OTP"
-            color="#0148a4"
-            accessibilityLabel="Resend OTP"
-          />
+          <TouchableHighlight
+            style={styles.btn}
+            underlayColor="rgba(62, 178, 250, 0.5)"
+            onPress={() => handleResend()}
+          >
+            <Text style={styles.submitText}>Resend OTP</Text>
+          </TouchableHighlight>
         </View>
       </View>
     </SafeAreaView>

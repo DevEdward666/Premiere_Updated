@@ -14,7 +14,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Actions } from "react-native-router-flux";
 var RNFS = require("react-native-fs");
 const controller = new AbortController();
-export const action_get_current_otp = (username,otp) => async (dispatch) => {
+export const action_get_current_otp = (username, otp) => async (dispatch) => {
   var url = `${BASE_URL}/api/user/getcurrentotp`;
   await fetch(url, {
     method: "POST",
@@ -23,21 +23,20 @@ export const action_get_current_otp = (username,otp) => async (dispatch) => {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      username:username,
+      username: username,
       otp: otp,
     }),
   })
     .then((response) => response.json())
     .then((res) => {
-      console.log(res)
-     if(res?.success){
-      dispatch({
-        type: REQUEST_CALLBACK,
-        payload: { message: res?.message, success: res?.success },
-      });
-      Actions.reset_password();
-     }
-  
+      console.log(res);
+      if (res?.success) {
+        dispatch({
+          type: REQUEST_CALLBACK,
+          payload: { message: res?.message, success: res?.success },
+        });
+        Actions.reset_password();
+      }
     });
 };
 export const action_send_otp_for_reset = (username) => async (dispatch) => {
@@ -54,13 +53,18 @@ export const action_send_otp_for_reset = (username) => async (dispatch) => {
   })
     .then((response) => response.json())
     .then((res) => {
-      if(res?.success){
-      dispatch({
-        type: REQUEST_CALLBACK,
-        payload: { message: res?.message, success: res?.success },
-      });
-      Actions.otp_reset_password();
-    }
+      if (res?.success) {
+        dispatch({
+          type: REQUEST_CALLBACK,
+          payload: { message: res?.message, success: res?.success },
+        });
+        Actions.otp_reset_password();
+      } else {
+        dispatch({
+          type: REQUEST_CALLBACK,
+          payload: { message: res?.message, success: res?.success },
+        });
+      }
     });
 };
 export const action_UPDATE_password =

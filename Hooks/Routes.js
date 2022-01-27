@@ -64,6 +64,7 @@ import PayMayaPaymentUI from "../Screens/Payments/PayMaya/PayMayaPaymentUI";
 import CardPaymentUI from "../Screens/Payments/Card/MainCardUI";
 import ResetPassword from "../Screens/ResetPassword/MainReset/ResetPassword";
 import OTPResetPassword from "../Screens/ResetPassword/ResetOTPScreen";
+import ForgotPassUI from "../Screens/ResetPassword/ForgotPassword/ForgotPassUI";
 import styles from "./style";
 const Routes = () => {
   const app_name = useSelector((state) => state.Default_Reducers.app_name);
@@ -75,6 +76,11 @@ const Routes = () => {
         <Scene key="signup_name" component={FirstInfo} title="Name" />
         <Scene key="update_info" component={UpdateInfoUI} title="Update Info" />
 
+        <Scene
+          key="forgot_password"
+          component={ForgotPassUI}
+          title="Forgot Password"
+        />
         <Scene
           key="otp_reset_password"
           component={OTPResetPassword}

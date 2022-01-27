@@ -159,6 +159,12 @@ const LoginScreen = (props) => {
                 Sign Up
               </Text>
             </Text>
+            <Text
+              onPress={() => Actions.forgot_password()}
+              style={{ color: "blue", textAlign: "center" }}
+            >
+              Forgot Password
+            </Text>
             <Text style={styles.startTextFooter}>
               By signing up, I have read and agreed to Premiere{" "}
               <Text onPress={() => gototerms()} style={{ color: "blue" }}>
@@ -180,7 +186,6 @@ const LoginScreen = (props) => {
       {geterror ? (
         <CustomSnackBar open={true} message={request_callback?.message} />
       ) : null}
-      
     </>
   );
 };
