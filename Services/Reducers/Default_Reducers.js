@@ -34,7 +34,10 @@ import {
   SET_TOKEN,
   PASSBASE_STATUS,
   REFRESH_PAYMENT,
-  REQUEST_CALLBACK
+  REQUEST_CALLBACK,
+  REQUEST_OTP_CALLBACK,
+  REQUEST_UPDATE_PASSWORD_CALLBACK,
+  REQUEST_GET_OTP_CALLBACK
 } from '../Types/Default_Types';
 
 const defult_values = {
@@ -75,9 +78,18 @@ const defult_values = {
   passbase_status:"",
   refresh_payment: false,
   request_callback:{message:"",success:false},
+  request_otp_callback:{message:"",success:false},
+  request_update_password_callback:{message:"",success:false},
+  request_get_otp_callback:{message:"",success:false},
 };
 const Default_Reducer = (data_state = defult_values, actions) => {
   switch (actions.type) {
+    case REQUEST_GET_OTP_CALLBACK:
+      return { ...data_state, request_get_otp_callback: actions.payload };
+    case REQUEST_UPDATE_PASSWORD_CALLBACK:
+      return { ...data_state, request_update_password_callback: actions.payload };
+    case REQUEST_OTP_CALLBACK:
+      return { ...data_state, request_otp_callback: actions.payload };
     case REQUEST_CALLBACK:
       return { ...data_state, request_callback: actions.payload };
     case REFRESH_PAYMENT:

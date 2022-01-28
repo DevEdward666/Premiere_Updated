@@ -4,7 +4,7 @@ const styles = StyleSheet.create({
       flex: 1,
       flexDirection: 'column',
       width: 100 + '%',
-  
+      backgroundColor:"white",
       height: 10 + '%',
     },
     ImageContainer: {
@@ -31,10 +31,17 @@ const styles = StyleSheet.create({
     },
     Title: {
       textAlign: 'center',
-      fontFamily: 'Open-Sans',
+      fontFamily: 'SFUIDisplay-Medium',
       fontSize: 18,
       width: 100 + '%',
       fontWeight: 'bold',
+      padding:10,
+    },
+    Subtitle: {
+      textAlign: 'left',
+      fontFamily: 'SFUIDisplay-Light',
+      fontSize: 18,
+      width: 100 + '%',
     },
     ImageSize: {
       width: 30 + '%',

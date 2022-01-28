@@ -7,6 +7,7 @@ import {
   SIGNALR_CONNECT_NOTIFY_FROM_QUEUE, SPINNER_ALERT,REFRESH_PAYMENT
 } from "../Types/Default_Types";
 import { SET_APPOINTMENT_MESSAGE } from "../Types/Diagnostic_Types";
+import { GET_LINK_MESSAGE } from "../Types/User_Types";
 export const action_GET_region = () => async (dispatch) => {
   var url = `${BASE_URL}/api/default/getregion`;
   await fetch(url, {
@@ -447,6 +448,18 @@ export const action_diagnostic_callback_reset = (alerted) => async (dispatch) =>
   dispatch({
     type: SET_APPOINTMENT_MESSAGE,
     payload: { message: "", success: false },
+  });
+};
+export const reset_request_callback = () => async (dispatch) => {
+  dispatch({
+    type: REQUEST_CALLBACK,
+    payload: { message: "", success: false },
+  });
+};
+export const reset_link_message = () => async (dispatch) => {
+  dispatch({
+    type: GET_LINK_MESSAGE,
+    payload:  "",
   });
 };
 export const action_refresh = refreshed => async dispatch => {

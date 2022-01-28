@@ -19,13 +19,7 @@ const CustomTermsAndConditions = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Terms and conditions</Text>
-      <ScrollView
-        style={styles.tcContainer}
-        onScroll={({nativeEvent}) => {
-          if (isCloseToBottom(nativeEvent)) {
-            setaccepted(true);
-          }
-        }}>
+      <ScrollView>
         <Text style={styles.tcL}>
           By downloading or using the app, these terms will automatically apply
           to you – you should make sure therefore that you read them carefully

@@ -8,6 +8,7 @@ import GestureRecognizer, {swipeDirections} from 'react-native-swipe-gestures';
 import  {action_open_bottomsheet} from '../Services/Actions/Default_Actions'
 import {useDispatch, useSelector} from 'react-redux'
 const CustomBottomSheet = ({isVisible, color, UI, Footer}) => {
+
   const [gestureName, setgestureName] = useState('');
   const dispatch=useDispatch()
   const onSwipe = useCallback((gestureName, gestureState) => {
@@ -44,8 +45,8 @@ const CustomBottomSheet = ({isVisible, color, UI, Footer}) => {
       modalProps={{animationType: 'slide'}}
       containerStyle={{backgroundColor: color}}>
       {UI}
-
-      <Card>{Footer}</Card>
+{Footer===undefined? null:<Card>{Footer}</Card>}
+     
     </BottomSheet>
     </GestureRecognizer>
 

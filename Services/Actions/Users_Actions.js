@@ -6,9 +6,16 @@ import {
   SET_PIN,
   SET_LOCKED,
   SET_QR_USER,
+  GET_LINK_DATA,
 } from "../Types/User_Types";
 import SplashScreen from "react-native-splash-screen";
-import { BASE_URL, REQUEST_CALLBACK } from "../Types/Default_Types";
+import {
+  BASE_URL,
+  REQUEST_CALLBACK,
+  REQUEST_GET_OTP_CALLBACK,
+  REQUEST_OTP_CALLBACK,
+  REQUEST_UPDATE_PASSWORD_CALLBACK,
+} from "../Types/Default_Types";
 import RNFetchBlob from "react-native-fetch-blob";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Actions } from "react-native-router-flux";
@@ -29,13 +36,11 @@ export const action_get_current_otp = (username, otp) => async (dispatch) => {
   })
     .then((response) => response.json())
     .then((res) => {
-      console.log(res);
       if (res?.success) {
         dispatch({
-          type: REQUEST_CALLBACK,
+          type: REQUEST_GET_OTP_CALLBACK,
           payload: { message: res?.message, success: res?.success },
         });
-        Actions.reset_password();
       }
     });
 };
@@ -52,20 +57,39 @@ export const action_send_otp_for_reset = (username) => async (dispatch) => {
     }),
   })
     .then((response) => response.json())
-    .then((res) => {
+    .then(async (res) => {
       if (res?.success) {
         dispatch({
-          type: REQUEST_CALLBACK,
+          type: REQUEST_OTP_CALLBACK,
           payload: { message: res?.message, success: res?.success },
         });
-        Actions.otp_reset_password();
+        await AsyncStorage.setItem("username", username);
+        await Actions.otp_reset_password();
       } else {
         dispatch({
-          type: REQUEST_CALLBACK,
+          type: REQUEST_OTP_CALLBACK,
           payload: { message: res?.message, success: res?.success },
         });
       }
     });
+};
+export const reset__get_otp_callback = () => async (dispatch) => {
+  dispatch({
+    type: REQUEST_GET_OTP_CALLBACK,
+    payload: { message: res?.message, success: res?.success },
+  });
+};
+export const reset_otp_callback = () => async (dispatch) => {
+  dispatch({
+    type: REQUEST_OTP_CALLBACK,
+    payload: { message: "", success: false },
+  });
+};
+export const reset_password_update_callback = () => async (dispatch) => {
+  dispatch({
+    type: REQUEST_UPDATE_PASSWORD_CALLBACK,
+    payload: { message: "", success: false },
+  });
 };
 export const action_UPDATE_password =
   (username, password) => async (dispatch) => {
@@ -84,7 +108,7 @@ export const action_UPDATE_password =
       .then((response) => response.json())
       .then((res) => {
         dispatch({
-          type: REQUEST_CALLBACK,
+          type: REQUEST_UPDATE_PASSWORD_CALLBACK,
           payload: { message: res?.message, success: res?.success },
         });
       });
@@ -219,6 +243,46 @@ export const action_SET_LinkRequest =
         return controller.abort();
       });
   };
+export const action_get_link_request = (prem_id) => async (dispatch) => {
+  var url = `${BASE_URL}/api/users/getlinkrequestbyprem_id`;
+  await fetch(url, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      prem_id: prem_id,
+    }),
+  })
+    .then((response) => response.json())
+    .then(async (res) => {
+      dispatch({
+        type: GET_LINK_DATA,
+        payload: { data: res?.data, success: res?.success },
+      });
+    });
+};
+export const action_update_link_request = (prem_id) => async (dispatch) => {
+  var url = `${BASE_URL}/api/users/UpdateLinkRequestMedicalRecords`;
+  await fetch(url, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      prem_id: prem_id,
+    }),
+  })
+    .then((response) => response.json())
+    .then(async (res) => {
+      dispatch({
+        type: GET_LINK_MESSAGE,
+        payload: res?.message,
+      });
+    });
+};
 export const action_GET_Docs = (filename) => async (dispatch) => {
   let mounted = true;
   const getfiles = async () => {

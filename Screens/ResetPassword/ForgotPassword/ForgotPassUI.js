@@ -12,8 +12,8 @@ import {
 import styles from "./style";
 function ForgotPassUI(props) {
   const dispatch = useDispatch();
-  const request_callback = useSelector(
-    (state) => state.Default_Reducers.request_callback
+  const request_otp_callback = useSelector(
+    (state) => state.Default_Reducers.request_otp_callback
   );
   const [username, setUsername] = useState("");
   const [getspinner, setspinner] = useState(false);
@@ -27,28 +27,31 @@ function ForgotPassUI(props) {
   useEffect(() => {
     let mounted = true;
     const getcallback = async () => {
-      if (request_callback?.success) {
-        setspinner(false);
-        setcallbackshow(true);
-        setcallbackmessage(request_callback?.message);
-        setTimeout(() => {
-          Actions.reset_password();
-        }, 3000);
-      } else {
-        await setspinner(false);
-        await setcallbackshow(true);
-        await setcallbackmessage(request_callback?.message);
-        // setTimeout(() => {
-        //   Actions.reset_password();
-        // }, 3000);
+      if(mounted){
+        if (request_otp_callback?.success) {
+          setspinner(false);
+          setcallbackshow(true);
+          setcallbackmessage(request_otp_callback?.message);
+          // setTimeout(() => {
+          //   Actions.reset_password();
+          // }, 3000);
+        } else {
+          if(request_otp_callback?.message!==" " && !request_otp_callback?.message.includes("External") &&  !request_otp_callback?.message.includes("No tokens")){
+            await setspinner(false);
+            await setcallbackshow(true);
+            await setcallbackmessage(request_otp_callback?.message);
+          }
+      
+        }
       }
+    
     };
     mounted && getcallback();
 
     return () => {
       mounted = false;
     };
-  }, [request_callback]);
+  }, [request_otp_callback]);
   return (
     <>
       {getspinner ? (

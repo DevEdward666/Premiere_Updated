@@ -84,7 +84,7 @@ function UsePersonalUI(props) {
     };
   };
   const handleSubmitAppointment = useCallback(async () => {
-    await setSpinner(true);
+   
     dispatch(
       action_POST_clinic_appointment(
         users_reducers?.img,
@@ -97,6 +97,7 @@ function UsePersonalUI(props) {
         selecteddocs
       )
     );
+    await setSpinner(true);
   }, [
     dispatch,
     pickdepartmentcode,

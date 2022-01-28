@@ -45,8 +45,6 @@ export const action_POST_clinic_appointment =
     selecteddocs.map((f) => {
       formdata.append("consultation_files", f);
     });
-
-    console.log(remarks, department, symptomps);
     await fetch(`${BASE_URL}/api/users/addClinicAppointment`, {
       method: "POST",
       headers: {
@@ -56,6 +54,7 @@ export const action_POST_clinic_appointment =
     })
       .then((response) => response.json())
       .then((res) => {
+        console.log(res);
         dispatch({
           type: SET_APPOINTMENT_MESSAGE,
           payload: {
@@ -64,7 +63,7 @@ export const action_POST_clinic_appointment =
             success: res.success,
           },
         });
-        console.log(res);
+ 
       });
   };
 

@@ -13,7 +13,7 @@ const EventCard = ({ title, description, image, day, month, year, time }) => {
         color="black"
         style={{ backgroundColor: "white" }}
       />
-      {/* <Avatar.Text
+      {/* <Avatar.Text`
         size={32}
         label={month}
         color="black"

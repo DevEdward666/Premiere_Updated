@@ -3,6 +3,7 @@ import {
   SET_IMAGE_USERS,
   SET_DOCIMAGE_USERS,
   GET_LINK_MESSAGE,
+  GET_LINK_DATA,
   SET_PIN,
   SET_LOCKED,
   SET_USERNAME,
@@ -18,9 +19,12 @@ const users_infos = {
   userinfo: [],
   username: '',
   user_qr: {qrbase64: ''},
+  link_data:{data:[],success:false}
 };
 const User_Reducers = (data_state = users_infos, actions) => {
   switch (actions.type) {
+    case GET_LINK_DATA:
+      return {...data_state, link_data: actions.payload};
     case SET_QR_USER:
       return {...data_state, user_qr: actions.payload};
     case SET_IMAGE_USERS:

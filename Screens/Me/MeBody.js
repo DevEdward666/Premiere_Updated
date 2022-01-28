@@ -12,7 +12,7 @@ const MeBody = (props) => {
   const dispatch = useDispatch();
   const handleChangePassword = useCallback(() => {
     dispatch(action_send_otp_for_reset(users_reducers?.username));
-    console.log("click");
+
   }, [dispatch, users_reducers]);
   const gotolink = async () => {
     let mounted = true;

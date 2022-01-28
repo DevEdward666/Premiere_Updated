@@ -8,16 +8,27 @@ import CustomTermsAndConditions from "../../Components/CustomTermsAndConditions"
 import CustomPrivacyandPolicy from "../../Components/CustomPrivacyandPolicy";
 import CustomGestureHandler from "../../Components/CustomGestureHandler";
 import { useDispatch, useSelector } from "react-redux";
-import { action_SET_LinkRequest } from "../../Services/Actions/Users_Actions";
+import {
+  action_get_link_request,
+  action_SET_LinkRequest,
+  action_update_link_request,
+} from "../../Services/Actions/Users_Actions";
 import CustomOverlay from "../../Components/CustomOverlay";
 import styles from "./linkstyles";
 import DoneOverlay from "../../Components/CustomOverlay/DoneOverlay";
 import Spinner from "react-native-loading-spinner-overlay";
-import { Action_Send_Notification_To_Admin } from "../../Services/Actions/Default_Actions";
+import {
+  Action_Send_Notification_To_Admin,
+  reset_link_message,
+  reset_request_callback,
+} from "../../Services/Actions/Default_Actions";
+import { Caption, Headline, Subheading, Title } from "react-native-paper";
+import moment from "moment";
 const LinkMedicalRecords = () => {
   const dispatch = useDispatch();
   const linkmessage = useSelector((state) => state.User_Reducers.link_message);
   const users_reducers = useSelector((state) => state.User_Reducers.userinfo);
+  const link_data = useSelector((state) => state.User_Reducers.link_data);
   const [agreechecked, setagreechecked] = useState(false);
   const [isVisible, setisVisible] = useState(false);
   const [isVisiblepap, setisVisiblepap] = useState(false);
@@ -41,7 +52,7 @@ const LinkMedicalRecords = () => {
     await setisVisible(false);
     await setisVisiblepap(true);
   }, [isVisible]);
-  const handleGestureUp = useCallback(async() => {
+  const handleGestureUp = useCallback(async () => {
     await setisVisible(false);
     await setisVisiblepap(false);
   }, [isVisible]);
@@ -54,7 +65,9 @@ const LinkMedicalRecords = () => {
     },
     [patient_no]
   );
-
+  const handleCancelLink = useCallback(() => {
+    dispatch(action_update_link_request(users_reducers?.prem_id?.toString()));
+  }, [dispatch, users_reducers]);
   const handleLinkMedical = useCallback(async () => {
     await setspinner(true);
     dispatch(
@@ -64,7 +77,12 @@ const LinkMedicalRecords = () => {
         "pending"
       )
     );
-    dispatch(Action_Send_Notification_To_Admin(`Requesting for linking medical records`,`User ${users_reducers?.prem_id} is Requesting for medical records linking`))
+    dispatch(
+      Action_Send_Notification_To_Admin(
+        `Requesting for linking medical records`,
+        `User ${users_reducers?.prem_id} is Requesting for medical records linking`
+      )
+    );
   }, [dispatch, patient_no, users_reducers?.prem_id]);
   useEffect(() => {
     let mounted = true;
@@ -86,19 +104,35 @@ const LinkMedicalRecords = () => {
   useEffect(() => {
     let mounted = true;
     const getcallback = () => {
-      setmessagevisible(true);
-      setspinner(false);
+      if (mounted) {
+        if (linkmessage !== "") {
+          setmessagevisible(true);
+          setspinner(false);
+          dispatch(action_get_link_request(users_reducers?.prem_id));
+        }
+      }
     };
     mounted && getcallback();
     return () => {
       mounted = false;
     };
-  }, [linkmessage]);
-  console.log(linkmessage)
-  const handleDone = () => {
+  }, [linkmessage, dispatch, users_reducers]);
+  const handleDone = useCallback(() => {
     setmessagevisible(false);
-
-  };
+    dispatch(reset_link_message());
+  }, [dispatch]);
+  useEffect(() => {
+    let mounted = true;
+    const getlinkrequest = () => {
+      if (mounted) {
+        dispatch(action_get_link_request(users_reducers?.prem_id));
+      }
+    };
+    mounted && getlinkrequest();
+    return () => {
+      mounted = false;
+    };
+  }, [dispatch, users_reducers]);
   return (
     <>
       {getspinner ? (
@@ -128,64 +162,90 @@ const LinkMedicalRecords = () => {
           }
         />
       ) : null}
-
-      <SafeAreaView style={styles.container}>
-        <View style={styles.ImageContainer}>
-          <Image
-            style={styles.ImageSize}
-            resizeMode="contain"
-            source={require("../../assets/icons/record.png")}
-          />
-        </View>
-        <View style={styles.TextContainer}>
-          <Text style={styles.Title}>Link Medical Records</Text>
-          <View style={styles.InputContainer}>
-            <Input
-              onChangeText={(text) => handleOnchangePatientNo(text)}
-              leftIcon={{ type: "font-awesome", name: "th" }}
-              placeholder="Patient No"
-              value={patient_no}
+      {link_data?.data?.length <= 0 ? (
+        <SafeAreaView style={styles.container}>
+          <View style={styles.ImageContainer}>
+            <Image
+              style={styles.ImageSize}
+              resizeMode="contain"
+              source={require("../../assets/icons/record.png")}
             />
           </View>
-          <CheckBox
-            disabled={checkboxdisabled}
-            style={styles.Title}
-            center
-            title="I agree to the terms and conditions"
-            checked={agreechecked}
-            onPress={() => handleagreechecked()}
+          <View style={styles.TextContainer}>
+            <Text style={styles.Title}>Link Medical Records</Text>
+            <View style={styles.InputContainer}>
+              <Input
+                onChangeText={(text) => handleOnchangePatientNo(text)}
+                leftIcon={{ type: "font-awesome", name: "th" }}
+                placeholder="Patient No"
+                value={patient_no}
+              />
+            </View>
+            <CheckBox
+              disabled={checkboxdisabled}
+              style={styles.Title}
+              center
+              title="I agree to the terms and conditions"
+              checked={agreechecked}
+              onPress={() => handleagreechecked()}
+            />
+            <View style={styles.ButtonContainer}>
+              <Button
+                disabled={buttondisabled}
+                raised
+                onPress={() => handleLinkMedical()}
+                title="Link Now"
+                type="outlined"
+              />
+            </View>
+          </View>
+          <CustomGestureHandler
+            down={() => handleGestureDown()}
+            UI={
+              <CustomBottomSheet
+                isVisible={isVisible}
+                color="white"
+                UI={<CustomTermsAndConditions />}
+              />
+            }
           />
+          <CustomGestureHandler
+            down={() => handleGestureUp()}
+            UI={
+              <CustomBottomSheet
+                isVisible={isVisiblepap}
+                color="white"
+                UI={<CustomPrivacyandPolicy />}
+              />
+            }
+          />
+        </SafeAreaView>
+      ) : (
+        <SafeAreaView style={styles.container}>
           <View style={styles.ButtonContainer}>
+            <Title style={styles.Title}>
+              Your link request No.# {link_data?.data[0]?.linkreq}
+            </Title>
+            <Subheading style={styles.Subtitle}>
+              Patient No.: {link_data?.data[0]?.patno}
+            </Subheading>
+            <Subheading style={styles.Subtitle}>
+              Requested At.:
+              {moment(link_data?.data[0]?.requested_date).format("MMM Do YYYY")}
+            </Subheading>
+            <Subheading style={styles.Subtitle}>
+              Status: {link_data?.data[0]?.status}
+            </Subheading>
             <Button
-              disabled={buttondisabled}
+              containerStyle={{ marginTop: 30 }}
               raised
-              onPress={() => handleLinkMedical()}
-              title="Link Now"
+              onPress={() => handleCancelLink()}
+              title="Cancel Link"
               type="outlined"
             />
           </View>
-        </View>
-        <CustomGestureHandler
-          down={() => handleGestureDown()}
-          UI={
-            <CustomBottomSheet
-              isVisible={isVisible}
-              color="white"
-              UI={<CustomTermsAndConditions />}
-            />
-          }
-        />
-        <CustomGestureHandler
-          down={() => handleGestureUp()}
-          UI={
-            <CustomBottomSheet
-              isVisible={isVisiblepap}
-              color="white"
-              UI={<CustomPrivacyandPolicy />}
-            />
-          }
-        />
-      </SafeAreaView>
+        </SafeAreaView>
+      )}
     </>
   );
 };

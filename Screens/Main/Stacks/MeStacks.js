@@ -19,12 +19,13 @@ function MeStacks(props) {
   const [isdeclined, setdeclined] = useState(false);
   const [loggedin, setloggedin] = useState(false);
   const dispatch = useDispatch();
+
   useEffect(() => {
     let mounted = true;
     const loadeds = async () => {
       if (mounted) {
         if (user_details !== null) {
-          if (token !== null) {
+          if (token !== "") {
             await setloggedin(true);
             if (!user_details?.active) {
               await setprocessing(false);

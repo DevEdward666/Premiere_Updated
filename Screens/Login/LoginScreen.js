@@ -81,12 +81,13 @@ const LoginScreen = (props) => {
   useEffect(() => {
     if (!request_callback?.success) {
       setload(false);
+      if(request_callback?.message!==" " && !request_callback?.message.includes("External")){
       seterror(true);
+      }else{
+        seterror(false);
+      }
     }
-
-    console.log(!request_callback?.success);
   }, [request_callback]);
-  console.log(geterror);
   return (
     <>
       <View style={styles.container}>

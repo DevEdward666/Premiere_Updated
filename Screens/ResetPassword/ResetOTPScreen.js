@@ -17,23 +17,30 @@ import { useDispatch, useSelector } from "react-redux";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Actions } from "react-native-router-flux";
 import styles from "./style";
-import { action_get_current_otp } from "../../Services/Actions/Users_Actions";
+import {
+  action_get_current_otp,
+  reset_otp_callback,
+  reset__get_otp_callback,
+} from "../../Services/Actions/Users_Actions";
 const ResetOTPScreen = () => {
   const dispatch = useDispatch();
   const [timer, setTimer] = useState(300);
   const [otp, setotp] = useState(0);
   const [mobileno, setmobileno] = useState(300);
 
-  const registrationcomplete = useSelector(
-    (state) => state.Default_Reducers.registrationcomplete
+  const request_get_otp_callback = useSelector(
+    (state) => state.Default_Reducers.request_get_otp_callback
   );
+
   useEffect(() => {
     let mounted = true;
     const settimers = () => {
-      if (timer > 0) {
-        setTimeout(() => setTimer(timer - 1), 1000);
-      } else {
-        setTimer(0);
+      if (mounted) {
+        if (timer > 0) {
+          setTimeout(() => setTimer(timer - 1), 1000);
+        } else {
+          setTimer(0);
+        }
       }
     };
 
@@ -42,38 +49,59 @@ const ResetOTPScreen = () => {
       mounted = false;
     };
   }, [timer]);
+  useEffect(() => {
+    let mounted = true;
+    const getcallback = () => {
+      if (mounted) {
+        if (request_get_otp_callback?.success) {
+          setTimeout(() => {
+            Actions.reset_password();
+            dispatch(reset__get_otp_callback());
+          }, 3000);
+        }
+      }
+    };
+
+    mounted && getcallback();
+    return () => {
+      mounted = false;
+    };
+  }, [request_get_otp_callback?.success, dispatch]);
+  useEffect(() => {
+    let mounted = true;
+    const resetotpcallback = () => {
+      if (mounted) {
+        dispatch(reset_otp_callback());
+      }
+    };
+
+    mounted && resetotpcallback();
+    return () => {
+      mounted = false;
+    };
+  }, [dispatch]);
 
   const handleSubmit = useCallback(async () => {
-    let mounted = true;
-    if (mounted) {
-      await AsyncStorage.getItem("username").then((item) => {
-        if (item) {
+    await AsyncStorage.getItem("username").then((item) => {
+      if (item) {
+        if (otp !== 0) {
           dispatch(action_get_current_otp(item, otp));
         }
-      });
-    }
-    return () => {
-      mounted = false;
-    };
+      }
+    });
   }, [dispatch, otp]);
-  const handleResend = async () => {
-    let mounted = true;
-    if (mounted) {
-      await AsyncStorage.getItem("username").then((item) => {
-        if (item) {
-          dispatch(action_addotp_for_reset_password(item));
-        }
-      });
-    }
-    return () => {
-      mounted = false;
-    };
-  };
-  AsyncStorage.getItem("mobileno").then((item) => {
-    if (item) {
-      setmobileno(item);
-    }
-  });
+  const handleResend = useCallback(async () => {
+    await AsyncStorage.getItem("username").then((item) => {
+      if (item) {
+        dispatch(action_addotp_for_reset_password(item));
+      }
+    });
+  }, [dispatch]);
+  // AsyncStorage.getItem("mobileno").then((item) => {
+  //   if (item) {
+  //     setmobileno(item);
+  //   }
+  // });
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={{ padding: 60 }}>
@@ -96,24 +124,22 @@ const ResetOTPScreen = () => {
         <Text h6 style={{ alignContent: "center", width: "100%" }}>
           Authentication Code until {timer} seconds
         </Text>
-        <View style={{ padding: 60, borderRadius: 20 }}>
-          <TouchableHighlight
-            style={styles.btn}
-            underlayColor="rgba(62, 178, 250, 0.5)"
-            onPress={() => handleSubmit()}
-          >
-            <Text style={styles.submitText}>Submit OTP</Text>
-          </TouchableHighlight>
-        </View>
-        <View style={{ padding: 60, borderRadius: 20, marginTop: -90 }}>
-          <TouchableHighlight
-            style={styles.btn}
-            underlayColor="rgba(62, 178, 250, 0.5)"
-            onPress={() => handleResend()}
-          >
-            <Text style={styles.submitText}>Resend OTP</Text>
-          </TouchableHighlight>
-        </View>
+
+        <TouchableHighlight
+          style={styles.btn}
+          underlayColor="rgba(62, 178, 250, 0.5)"
+          onPress={() => handleSubmit()}
+        >
+          <Text style={styles.submitText}>Submit OTP</Text>
+        </TouchableHighlight>
+
+        <TouchableHighlight
+          style={styles.btn}
+          underlayColor="rgba(62, 178, 250, 0.5)"
+          onPress={() => handleResend()}
+        >
+          <Text style={styles.submitText}>Resend OTP</Text>
+        </TouchableHighlight>
       </View>
     </SafeAreaView>
   );

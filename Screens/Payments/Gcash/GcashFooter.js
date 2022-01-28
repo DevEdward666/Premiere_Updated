@@ -84,7 +84,7 @@ const GcashFooter = () => {
     await setconstult_pk(consult_info?.data[0]?.appointment_id);
     await setbillingtype("gcash");
     await setbillingcurrency("PHP");
-    await setbillingamount(500);
+    await setbillingamount(50000);
     await setbillingdescription("Consultation Payment");
     await setbillingstatement_descriptor(
       "Consultation Payment from OPD Telemedicine"
@@ -122,7 +122,7 @@ const GcashFooter = () => {
       await setconstult_pk(consult_info?.data[0]?.appointment_id);
       await setbillingtype("gcash");
       await setbillingcurrency("PHP");
-      await setbillingamount(500);
+      await setbillingamount(50000);
       await setbillingdescription("Consultation Payment");
       await setbillingstatement_descriptor(
         "Consultation Payment from OPD Telemedicine"
@@ -155,7 +155,7 @@ const GcashFooter = () => {
         updateToChargeable({
           id: sourcedata?.source,
           attributes: {
-            amount: 500,
+            amount: 50000,
             description: "Consultation Payment",
             currency: "PHP",
             statement_descriptor: "Consultation Payment from OPD Telemedicine",
@@ -166,7 +166,7 @@ const GcashFooter = () => {
                   id: sourcedata?.source,
                   type: "gcash",
                 },
-                amount: 500,
+                amount: 50000,
                 bliing: {
                   address: {
                     line1: consult_info?.data[0]?.line1,
@@ -233,7 +233,7 @@ const GcashFooter = () => {
     await setbillingdata({
       id: sourcedata?.source,
       attributes: {
-        amount: 500,
+        amount: 50000,
         description: "Consultation Payment",
         currency: "PHP",
         statement_descriptor: "Consultation Payment from OPD Telemedicine",
@@ -244,7 +244,7 @@ const GcashFooter = () => {
               id: sourcedata?.source,
               type: "payment",
             },
-            amount: 500,
+            amount: 50000,
             bliing: {
               address: {
                 line1: consult_info?.data[0]?.line1,
